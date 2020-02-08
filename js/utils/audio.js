@@ -1,77 +1,42 @@
-const InvadersAudio = {
-	currentMusicNote: 0,
-	nextNoteTime: 0,
-	maxNextNoteTime: 50,
-	musicNotes: [
-		220,
-		196,
-		174,
-		164	
-	],
-	currentSpaceshipNote: 0,
-	nextSpaceshipNoteTime: 0,
-	maxNextSpaceshipNoteTime: 10,
-	spaceshipNotes: [
-		1000,
-		800
-	],
-	sine: BAudio.createOscillator(BAudio.Oscillators.SINE),
-	square: BAudio.createOscillator(BAudio.Oscillators.SQUARE),
-	triangle: BAudio.createOscillator(BAudio.Oscillators.TRIANGLE),
-	sawtooth: BAudio.createOscillator(BAudio.Oscillators.SAWTOOTH),
+const BAudio = {
+	ctx: new AudioContext(),
+	audioWorkerMode: false,
+	Oscillators: {
+		SINE: "sine",
+		SQUARE: "square",
+		TRIANGLE: "triangle",
+		SAWTOOTH: "sawtooth"
+	},
+	createOscillator(type) {
+		const ctx = new AudioContext();
+		const oscillator = ctx.createOscillator();
+		const gain = ctx.createGain();
 
-	progressSpaceshipSnd() {
-		this.nextSpaceshipNoteTime++;
-
-		if (this.nextSpaceshipNoteTime >= this.maxNextSpaceshipNoteTime) {
-			BAudio.playOscillator(
-				this.sine,
-				this.spaceshipNotes[this.currentSpaceshipNote],
-				70
-			);
-			this.currentSpaceshipNote++;
-
-			if (this.currentSpaceshipNote > this.spaceshipNotes.length - 1) {
-				this.currentSpaceshipNote = 0;
-			}
+		oscillator.type = type;
+		oscillator.start();
+		gain.gain.value = 0;
+		oscillator.connect(gain);
+		gain.connect(ctx.destination);
+		return {
+			ctx: ctx,
+			oscillator: oscillator,
+			gain: gain
+		};
+	},
+	playOscillator(oscillator, frequency = 440, duration = 100, volume = 0.1) {
 		
-			this.nextSpaceshipNoteTime = 0;
-		}
-	},
+		oscillator.oscillator.frequency.value = frequency;
+		oscillator.gain.gain.value = volume;
 
-	playPlayerShootSnd() {
-		BAudio.playOscillator(this.sine, 1600);
-	},
-	playExplosionSnd() {
-		const et = 200;
-
-		BAudio.playOscillator(this.triangle, 200, et);
 		window.setTimeout(() => {
-			BAudio.playOscillator(this.triangle, 500, et);
-		}, et);	
+			oscillator.gain.gain.value = 0;
+		}, duration);
 	},
-	progressMusic() {
-		this.nextNoteTime++;
-
-		if (this.nextNoteTime >= this.maxNextNoteTime) {
-			BAudio.playOscillator(
-				this.square,
-				this.musicNotes[this.currentMusicNote],
-				100,
-				0.05
-			);
-			this.currentMusicNote++;
-
-			if (this.currentMusicNote > this.musicNotes.length - 1) {
-				this.currentMusicNote = 0;
-			}
-		
-			this.nextNoteTime = 0;
-		}
-	},
-	speedUpMusic() {
-		if (this.maxNextNoteTime > 5) {
-			this.maxNextNoteTime--;
+	init() {
+		if (this.ctx.audioWorklet) {
+			this.ctx.audioWorklet.addModule('whiteNoiseProcessor.js');
+			this.whiteNoiseNode = new AudioWorkletNode(this.ctx, 'white-noise-processor');
+			this.whiteNoiseNode.connect(this.ctx.destination);
 		}
 	}
-};
+}

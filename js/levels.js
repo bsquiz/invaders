@@ -1,17 +1,16 @@
 const InvadersLevels = {
-	alienRows: 5,
-	alienCols: 5,
+	alienCols: 8,
 	alienPadding: 16,
 	aliensStartX: 0,
 	aliensStartY: 0,
 
-	makeAliens(gameHeight) {
+	makeAliens(alienRows, gameHeight) {
 		let sx = this.aliensStartX;
 		let sy = this.aliensStartY;
 		let points = 60;
 		const aliens = [];
 
-		for (let i=0; i<this.alienRows; i++) {
+		for (let i=0; i<alienRows; i++) {
 			for (let j=0; j<this.alienCols; j++) {	
 				const a = new InvadersAlien(i);
 				a.setPoints(points);
@@ -43,16 +42,6 @@ const InvadersLevels = {
 			x += diff;
 		}	
 		return covers;	
-	},
-	
-	parseLevel(level = [], gameWidth, gameHeight) {
-		const aliens = this.makeAliens(gameWidth, gameHeight);
-		const cover = this.makeCovers(gameWidth, gameHeight);
-
-		return {
-			aliens: aliens,
-			covers: cover
-		};
 	},
 	
 	init(gameWidth, gameHeight) {

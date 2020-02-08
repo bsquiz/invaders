@@ -5,12 +5,12 @@ const BInput = {
 		SPACE: false,
 		P: false
 	},
-        Keys: {
-                LEFT: 37,
-                RIGHT: 39,
+	Keys: {
+		LEFT: 37,
+		RIGHT: 39,
 		SPACE: 32,
-                P: 80
-        },
+		P: 80
+	},
 	KeysByCode: {
 		32: 'SPACE',
 		37: 'LEFT',
@@ -75,20 +75,10 @@ const BInput = {
 			this.Keys[prop] = false;
 		}
 	},
-	toggleKeyState(keyCode) {
-		const key = this.Keys[this.KeysByCode[keyCode]];
+	setKeyDown(keyCode, isDown) {
+		if (this.keysDown[keyCode] === undefined) return;
 
-		if (!key) {
-			return;
-		}
-	
-		this.keysDown[key] = !this.keysDown[key];
-	},
-        onKeyDown(e) {
-		this.toggleKeyState(e.keyCode);
-	},
-        onKeyUp(e) {
-		this.toggleKeyState(e.keyCode);
+		this.keysDown[keyCode] = isDown;
 	},
 	onMouseMove(e) {
 		this.mouse.x = e.pageX;
@@ -107,8 +97,9 @@ const BInput = {
 	init() {
 		const $canvas = document.getElementById('canvas');
 
-		window.addEventListener('keydown', e => this.onKeyDown(e));  
-		window.addEventListener('keyup', e => this.onKeyUp(e));
+		window.addEventListener('keydown', e => this.setKeyDown(e.keyCode, true));  
+		window.addEventListener('keyup', e => this.setKeyDown(e.keyCode, false));
+
 		window.addEventListener('gamepadconnected', e => this.onGamepadConnected(e));
 		window.addEventListener('gamepaddisconnected', e => this.onGamepadDisconnected(e));
 		$canvas.addEventListener('mousemove', e => this.onMouseMove(e));

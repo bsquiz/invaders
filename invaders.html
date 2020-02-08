@@ -1,19 +1,33 @@
 <html>
 	<head>
 		<title>wow</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	</head>
 	<body>
-		<canvas id="canvas" width="400" height="300"></canvas>
-			<div class="instructions">
-			<p>HOW TO PLAY</p>
-			<ul>
-				<li>move with mouse</li>
-				<li>click to shoot</li>
-			</ul>
+		<div>
+			<div>
+				<div id="menu">
+					<h1>Space Invaders</h1>
+					<div class="instructions">
+						<p>HOW TO PLAY</p>
+						<table>
+							<tr>
+								<td>move</td>
+								<td>move with mouse</td>
+							</tr>
+							<tr>
+								<td>shoot</td>
+								<td>click to shoot</td>
+							</tr>
+						</table>
+					</div>
+					<button onclick="startGame()">start</button>
+				</div>
+				<canvas id="canvas" class="d-none" width="300" height="300"></canvas>
+			</div>
+			<button onclick="InvadersAudio.toggleMute()">toggle sound</button>	
 		</div>
-
-	
-		<div id="sprites"></div>
+		<div id="sprites" class="d-none"></div>
 
 		<script src="js/objects/gameObject.js"></script>
 		<script src="js/objects/animatedGameObject.js"></script>
@@ -27,25 +41,43 @@
 		<script src="js/utils/input.js"></script>
 		<script src="js/utils/audio.js"></script>
 		<script src="js/utils/graphics.js"></script>
+		<script src="js/audio.js"></script>
 		<script src="js/levels.js"></script>
 		<script src="js/sprites.js"></script>
 		<script src="js/aliens.js"></script>
 		<script src="js/graphics.js"></script>
-		<script src="js/audio.js"></script>
 		<script src="js/game.js"></script>
 	
 		<script>
+			function $(selector) {
+				return document.getElementById(selector);
+			}
+			
+			function removeClass(el, cls) {
+				const index = el.className.indexOf(cls);
+				
+				if (index === -1) return;
+
+				el.className.slice(index, cls.length);
+			}
+			function addClass(el, cls) {
+				if (el.className.indexOf(cls) !== -1) return;
+
+				el.className += ` ${cls}`;
+			}
 			function updateGame() {
 				Invaders.update();
 				window.requestAnimationFrame(updateGame);
 			}
 
-			window.onload = function() {
+			function startGame() {
+				$('canvas').className = '';
+//				removeClass($('canvas'), 'd-none');	
+				addClass($('menu'), 'd-none');	
 				Invaders.init();			
 				Invaders.startGame();
 				window.requestAnimationFrame(updateGame);
 			};
-
 		</script>
 
 		<style>
@@ -53,16 +85,30 @@
 				background: black;
 				color: white;
 	  		}
+			.text-center {
+				text-align: center;
+			}
+			.d-none {
+				display: none;
+			}
+			.grid-container {
+				display: grid;
+				grid-template-columns: 25% minmax(min-content) 25%;
+			}
 			#canvas {
 				height: 600px;
 				width: 800px;
-				float: left;
-				margin-right: 50px;
+				margin-bottom: 15px;
+				cursor: none;
 			}
 			canvas {
-				padding: 5px;
-				margin: 0 auto;
   				border: solid 1px white;
+			}
+			@media(max-width: 640px) {
+				#canvas {
+					width: 100%;
+					height: 100%;
+				}
 			}
 		</style>
 	</body>

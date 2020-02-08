@@ -33,7 +33,7 @@ class InvadersGraphics {
 			const canvas = document.createElement('canvas');
 			canvas.width = 16 * scale;
 			canvas.height = 16 * scale;
-			// canvas.style.display = 'none';
+			canvas.style.display = 'none';
 			$sprites.appendChild(canvas);
 		
 			return canvas;
@@ -120,6 +120,27 @@ class InvadersGraphics {
 				a.getHeight()
 			);
 		}	
+	}
+	
+	forceClear() {
+		this.ctx.clearRect(
+			0,
+			0,
+			this.outputWidth,
+			this.outputHeight
+		);
+	}
+
+	drawLevelTransition(level, delay) {
+		this.forceClear();
+
+		BFont.drawString(
+			`wave ${level}`,
+			this.outputWidth / 2,
+			this.outputHeight / 2,
+			1,
+			this.ctx
+		);	
 	}
 
 	drawCovers() {

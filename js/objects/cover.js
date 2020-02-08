@@ -30,9 +30,21 @@ class InvadersCover extends GameObject {
 		const rowIndex = parseInt(x / this.tileScale);
 		const colIndex = parseInt(y / this.tileScale);
 		const structureIndex = rowIndex * this.cols + colIndex;
-	
+			
 		if (this.structure[structureIndex] === '*') {
 			this.takeDamage(structureIndex);
+			
+			if (this.structure[structureIndex + 1]) {
+				if (this.structure[structureIndex + 1] === '*') {
+					this.takeDamage(left);
+				}
+			}
+
+			if (this.structure[structureIndex + 2]) {
+				if (this.structure[structureIndex + 2] === '*') {
+					this.takeDamage(structureIndex + 2);
+				}
+			}
 
 			return true;
 		}

@@ -1,4 +1,5 @@
 const InvadersAudio = {
+	isMuted: false,
 	currentMusicNote: 0,
 	nextNoteTime: 0,
 	maxNextNoteTime: 50,
@@ -20,7 +21,15 @@ const InvadersAudio = {
 	triangle: BAudio.createOscillator(BAudio.Oscillators.TRIANGLE),
 	sawtooth: BAudio.createOscillator(BAudio.Oscillators.SAWTOOTH),
 
+	toggleMute() { this.isMuted = !this.isMuted; },
+
+	resetMusic() {
+		this.maxNextNoteTime = 50;
+	},
+
 	progressSpaceshipSnd() {
+		if (this.isMuted) return;
+
 		this.nextSpaceshipNoteTime++;
 
 		if (this.nextSpaceshipNoteTime >= this.maxNextSpaceshipNoteTime) {
@@ -40,9 +49,13 @@ const InvadersAudio = {
 	},
 
 	playPlayerShootSnd() {
+		if (this.isMuted) return;
+
 		BAudio.playOscillator(this.sine, 1600);
 	},
 	playExplosionSnd() {
+		if (this.isMuted) return;
+
 		const et = 200;
 
 		BAudio.playOscillator(this.triangle, 200, et);
@@ -51,6 +64,8 @@ const InvadersAudio = {
 		}, et);	
 	},
 	progressMusic() {
+		if (this.isMuted) return;
+
 		this.nextNoteTime++;
 
 		if (this.nextNoteTime >= this.maxNextNoteTime) {

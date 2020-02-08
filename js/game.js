@@ -4,23 +4,30 @@ const Invaders = {
 	level: 1,
 	player: null,
 	covers: null,
+	level: 0,
+	levels: [],
 	aliens: [],
 	spaceship: null,
 	playerProjectiles: [],
 	alienProjectiles: [],
 	explosions: [],
 	isRunning: false,
-	gameWidth: 400,
+
+	isTransitioningLevel: false,
+	levelTransitionTimer: 60,
+	MAX_LEVEL_TRANSITION_TIMER: 60,
+
+	gameWidth: 300,
 	gameHeight: 300,
 	minCoverY: 200,
 	maxCoverY: 300,
 	maxHUD: 25,
 	scale: 1,
+
 	graphics: null,
 	alienUpdateDelay: 0,
 	maxAlienUpdateDelay: 10,
 	scaleFactor: 0,
-
 	startGame() {
 		this.isRunning = true;
 	},
@@ -39,6 +46,16 @@ const Invaders = {
 			this.graphics.setLives(this.lives);
 			this.graphics.scheduleHUDRefresh();
 		}
+	},
+
+	startNextLevel() {
+		this.level++;
+		this.isTransitioningLevel = true;
+		this.aliens = this.levels[this.level - 1];
+		this.graphics.setAliens(this.aliens);
+		InvadersAliens.setAliens(this.aliens);
+		InvadersAudio.resetMusic();
+		this.graphics.drawLevelTransition(this.level);
 	},
 
 	startExplosion(x, y) {
@@ -171,16 +188,20 @@ const Invaders = {
 					InvadersAliens.speedUpAliens();
 					InvadersAudio.speedUpMusic();
 				});
-				if (
-					projectile.hitTest(
-					this.spaceship.getX(),
-					this.spaceship.getY(),
-					this.spaceship.getWidth(),
-					this.spaceship.getHeight()
-				)
-				) {
-				this.score += this.spaceship.getPoints();
-				this.spaceship.reset();
+
+				// flying saucer enemy
+				if (this.spaceship.getIsActive()) {
+					if (
+						projectile.hitTest(
+						this.spaceship.getX(),
+						this.spaceship.getY(),
+						this.spaceship.getWidth(),
+						this.spaceship.getHeight()
+					)
+					) {
+						this.score += this.spaceship.getPoints();
+						this.spaceship.reset();
+				}
 				}
 			}
 		);
@@ -193,6 +214,21 @@ const Invaders = {
 				});
 			}
 		);
+	},
+	
+	controlPlayerWithKeyboard() {
+		this.player.setXSpeed(0);
+
+		if (BInput.keyIsDown(BInput.Keys.LEFT)) {
+			this.player.setXSpeed(this.player.getDefaultXSpeed());
+			console.log('left');
+		} else if (BInput.keyIsDown(BInput.Keys.RIGHT)) {
+			this.player.setXSpeed(this.player.getDefaultXSpeed() * -1);
+		}
+
+		if (BInput.keyIsDown(BInput.Keys.SPACE)) {
+			this.player.shoot();
+		}
 	},
 
 	controlPlayerWithMouse() {
@@ -236,6 +272,19 @@ const Invaders = {
 			return;
 		}
 
+		if (this.isTransitioningLevel) {
+			this.levelTransitionTimer--;
+			
+			if (this.levelTransitionTimer < 0) {
+				this.levelTransitionTimer = this.MAX_LEVEL_TRANSITION_TIMER;
+				this.isTransitioningLevel = false;
+				this.graphics.forceClear();
+				this.graphics.drawHUD();
+			}
+			
+			return;
+		}
+
 		if (this.lives === 0) {
 			this.gameOver();
 			
@@ -253,6 +302,7 @@ const Invaders = {
 		if (BInput.getGamepadConnected()) {
 			this.controlPlayerWithGamepad();
 		} else {
+//			this.controlPlayerWithKeyboard();
 			this.controlPlayerWithMouse();
 		}
 
@@ -300,6 +350,10 @@ const Invaders = {
 
 		InvadersAudio.progressMusic();
 		this.graphics.draw(this.gameWidth, this.gameHeight);
+		
+		if (this.aliens.length === 0) {
+			this.startNextLevel();
+		}
 	},
 
 	reset() {
@@ -326,13 +380,17 @@ const Invaders = {
 	init() {
 		InvadersLevels.init(this.gameWidth, this.gameHeight);
 		const $canvas = document.getElementById('canvas');
-		const level = InvadersLevels.parseLevel([], this.gameWidth, this.gameHeight);
+		for (let i=1; i<99; i++) {
+			let rows = (i < 7) ? i : 6;
+			this.levels.push(
+				InvadersLevels.makeAliens(rows, this.gameHeight)
+			);
+		}
 
 		this.scaleFactor = 0.5;
 
 		this.graphics = new InvadersGraphics($canvas);
 		this.player = new InvadersPlayer();
-		this.aliens = level.aliens;
 		this.initProjectiles();
 
 		this.spaceship = new InvadersSpaceship(
@@ -343,26 +401,25 @@ const Invaders = {
 			this.explosions.push(new InvadersExplosion());
 		}
 
-		this.covers = level.covers;
+		this.covers = InvadersLevels.makeCovers(this.gameWidth, this.gameHeight);
 
 		this.graphics.setPlayer(this.player);
 		this.graphics.setSpaceship(this.spaceship);
-		this.graphics.setAliens(this.aliens);
 		this.graphics.setPlayerProjectiles(this.playerProjectiles);
 		this.graphics.setAlienProjectiles(this.alienProjectiles);
 		this.graphics.setCovers(this.covers);
-		this.graphics.setExplosions(this.explosions);		
+		this.graphics.setExplosions(this.explosions);
 		this.graphics.init();
 
 		InvadersAliens.setGameWidth(this.gameWidth);
 		InvadersAliens.setGameHeight(this.gameHeight);
-		InvadersAliens.setAliens(this.aliens);
+		InvadersAliens.setGameOverY(this.gameHeight - this.player.getHeight());
 		InvadersAliens.setProjectiles(this.alienProjectiles);
 		InvadersAliens.setShootFunction(this.shootProjectile);
 
 		BAudio.init();
 		BInput.init();
 		this.reset();
-		this.startGame();
+		this.startNextLevel();
 	}
 };
