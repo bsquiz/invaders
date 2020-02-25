@@ -2,12 +2,13 @@ class InvadersAlien extends AnimatedGameObject {
 	constructor(type) {
 		super();
 		this.type = type;
+		this.points = 10;
+		this.MAX_X_SPEED = 30;
 		this.xSpeed = 1;
 		this.ySpeed = 0;
 		this.isMoving = true;
+		this.isActive = true;
 		this.hp = 1;
-		this.points = 10;
-		this.MAX_X_SPEED = 10;
 		this.direction = 1;
 	}
 

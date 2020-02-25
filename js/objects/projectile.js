@@ -4,6 +4,7 @@ class InvadersProjectile extends GameObject {
 		this.isActive = false;
 		this.isMoving = true;
 		this.xSpeed = 0;
+		this.ySpeed = 3;
 	}
 
 	setIsActive(active) {

@@ -1,8 +1,8 @@
 class InvadersGraphics {
 	constructor($canvas) {
 		const $body = document.getElementsByTagName('body')[0];
-
 		const $sprites = document.getElementById('sprites');
+
 		this.ctx = $canvas.getContext('2d', { alpha: false });
 		this.outputWidth = $canvas.width;
 		this.outputHeight = $canvas.height;
@@ -131,16 +131,42 @@ class InvadersGraphics {
 		);
 	}
 
+	drawGameOver() {
+		let dimensions = BFont.measureString('game over');
+		let x = parseInt(
+			this.outputWidth / 2 - (dimensions.width / 2)
+		);
+		let y = parseInt(
+			this.outputHeight / 2
+		);
+			
+		this.forceClear();
+		
+		BFont.drawString('game over', x, y, 1, this.ctx);
+
+		dimensions = BFont.measureString('press r to restart');
+		x = this.outputWidth / 2 - (dimensions.width / 2);
+		y += 50;
+
+		BFont.drawString(
+			'press r to restart', x, y, 1, this.ctx
+		);
+	}
+
 	drawLevelTransition(level, delay) {
+		let x = this.outputWidth / 2;
+		let y = this.outputHeight / 2;
+
 		this.forceClear();
 
 		BFont.drawString(
 			`wave ${level}`,
-			this.outputWidth / 2,
-			this.outputHeight / 2,
+			x,
+			y,
 			1,
 			this.ctx
 		);	
+
 	}
 
 	drawCovers() {
@@ -265,7 +291,8 @@ class InvadersGraphics {
 	preloadCover(index) {
 		BGraphics.preloadDraw(
 			this.covers[index].getStructure(),
-			this.coverCanvas[index]
+			this.coverCanvas[index],
+			'green'
 		);
 	}
 	
@@ -296,12 +323,14 @@ class InvadersGraphics {
 	
 		BGraphics.preloadDraw(
 			InvadersSprites.player,
-			this.$playerCanvas
+			this.$playerCanvas,
+			'green'
 		);
 		
 		BGraphics.preloadDraw(
 			InvadersSprites.spaceship,
-			this.$spaceshipCanvas
+			this.$spaceshipCanvas,
+			'red'
 		);
 	}			
 }

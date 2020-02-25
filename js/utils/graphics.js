@@ -5,17 +5,17 @@ const BGraphics = {
 		cols: 16
 	},
 
-        drawTile(tile, x, y, width, height, ctx) {
-                if (tile === '*') {
-                        ctx.moveTo(x, y);
-                        ctx.lineTo(x + width, y);
-                        ctx.lineTo(x + width, y + height);
-                        ctx.lineTo(x, y + height);
-                        ctx.closePath();
-                }
-        },
+	drawTile(tile, x, y, width, height, ctx) {
+		if (tile === '*') {
+			ctx.moveTo(x, y);
+			ctx.lineTo(x + width, y);
+			ctx.lineTo(x + width, y + height);
+			ctx.lineTo(x, y + height);
+			ctx.closePath();
+		}
+	},
 
-        drawGraphicsMap(map, x, y, ctx) {
+	drawGraphicsMap(map, x, y, ctx) {
                 let drawX = x * this.scale;
                 let drawY = y * this.scale;
                 let tileWidth = this.scale;
@@ -46,16 +46,16 @@ const BGraphics = {
                 ctx.fill();
         },
 
-        preloadDraw(sprite, $canvas, width, height) {
-                const ctx = $canvas.getContext('2d');
+		preloadDraw(sprite, $canvas, color = '#f0f0f0') {
+			const ctx = $canvas.getContext('2d');
 		
-		ctx.clearRect(0, 0, $canvas.width, $canvas.height); 		               
-                ctx.fillStyle = '#f0f0f0';
-                this.drawGraphicsMap(
-                        sprite,
-                        0,
-                        0,
-                        ctx
-                );
-        }
+			ctx.clearRect(0, 0, $canvas.width, $canvas.height);
+			ctx.fillStyle = color;
+			this.drawGraphicsMap(
+				sprite,
+				0,
+				0,
+				ctx
+			);
+		}
 };

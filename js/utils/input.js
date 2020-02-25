@@ -1,21 +1,24 @@
 const BInput = {
 	keysDown: {
-		LEFT: false,
-		RIGHT: false,
-		SPACE: false,
-		P: false
+		'37': false,
+		'39': false,
+		'32': false,
+		'80': false,
+		'82': false
 	},
 	Keys: {
 		LEFT: 37,
 		RIGHT: 39,
 		SPACE: 32,
-		P: 80
+		P: 80,
+		R: 82
 	},
 	KeysByCode: {
 		32: 'SPACE',
 		37: 'LEFT',
 		39: 'RIGHT',
-		80: 'P'
+		80: 'P',
+		82: 'R'
 	},
 	mouse: {
 		x: 0,
@@ -97,8 +100,14 @@ const BInput = {
 	init() {
 		const $canvas = document.getElementById('canvas');
 
-		window.addEventListener('keydown', e => this.setKeyDown(e.keyCode, true));  
-		window.addEventListener('keyup', e => this.setKeyDown(e.keyCode, false));
+		window.addEventListener(
+			'keydown',
+			e => this.setKeyDown(e.keyCode, true)
+		);  
+		window.addEventListener(
+			'keyup',
+			e => this.setKeyDown(e.keyCode, false)
+		);
 
 		window.addEventListener('gamepadconnected', e => this.onGamepadConnected(e));
 		window.addEventListener('gamepaddisconnected', e => this.onGamepadDisconnected(e));

@@ -33,7 +33,7 @@ const InvadersAliens = {
 			const x = alien.getX();
 
 			if (!shooting) {
-				const shouldShoot = Math.floor(Math.random() * 100);
+				const shouldShoot = Math.floor(Math.random() * 10);
 
 				if (shouldShoot === 0) {
 					shooting = true;

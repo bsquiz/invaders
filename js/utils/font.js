@@ -1,11 +1,11 @@
 const BFont = {
 	characterCols: 5,
+	characterRows: 10,
 	characterPadding: 5,
 	sectionWidth: 1,
 	sectionHeight: 1,
 	characters: {
 		' ': [
-			' ',' ',' ',' ',' ',
 			' ',' ',' ',' ',' ',
 			' ',' ',' ',' ',' ',
 			' ',' ',' ',' ',' ',
@@ -113,6 +113,18 @@ const BFont = {
 			'*',' ',' ',' ','*',
 			'*','*','*','*','*'
 		],
+		'p': [
+			'*','*','*','*','*',
+			'*',' ',' ',' ','*',
+			'*',' ',' ',' ','*',
+			'*','*','*','*','*',
+			'*',' ',' ',' ',' ',
+			'*',' ',' ',' ',' ',
+			'*',' ',' ',' ',' ',
+			'*',' ',' ',' ',' ',
+			'*',' ',' ',' ',' ',
+			'*',' ',' ',' ',' '
+		],
 		'r': [
 			'*','*','*','*','*',
 			'*',' ',' ',' ','*',
@@ -136,6 +148,18 @@ const BFont = {
 			' ',' ',' ',' ','*',
 			' ',' ',' ',' ','*',
 			'*','*','*','*','*'
+		],
+		't': [
+			'*','*','*','*','*',
+			' ',' ','*',' ',' ',
+			' ',' ','*',' ',' ',
+			' ',' ','*',' ',' ',
+			' ',' ','*',' ',' ',
+			' ',' ','*',' ',' ',
+			' ',' ','*',' ',' ',
+			' ',' ','*',' ',' ',
+			' ',' ','*',' ',' ',
+			' ',' ','*',' ',' '
 		],
 		'v': [
 			'*',' ',' ',' ','*',
@@ -282,6 +306,18 @@ const BFont = {
 			' ',' ',' ',' ','*',
 			' ',' ',' ',' ','*'
 		]
+	},
+
+	measureString(string, scale = 1) {
+		const width = string.length * this.sectionWidth *
+			this.characterCols * scale +
+			(string.length * this.characterPadding);
+		const height = this.sectionHeight * this.characterCols * scale;
+ 
+		return {
+			width: width,
+			height: height
+		};
 	},
 
 	drawString(string, x, y, scale, ctx) {

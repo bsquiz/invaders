@@ -6,10 +6,15 @@ class GameObject {
 		this.width = 16;
 		this.height = 16;
 		this.hp = 0;
-		this.ySpeed = 1;
-		this.xSpeed = 1;
 		this.defaultXSpeed = 1;
 		this.defaultYSpeed = 1;
+		
+		this.reset();
+	}
+
+	reset() {
+		this.xSpeed = 1;
+		this.ySpeed = 1;
 		this.isMoving = false;
 		this.isDestroyed = false;
 		this.isActive = false;
@@ -57,12 +62,7 @@ class GameObject {
 		}
 	}
 
-	reset() {
-		this.x = 0;
-		this.y = 0;
-		this.xSpeed = 0;
-		this.ySpeed = 0;
-	}
+	
 
 	hitTest(tx, ty, tw, th) {
 		// check intersection with center of object
