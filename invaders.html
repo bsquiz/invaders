@@ -3,30 +3,39 @@
 		<title>wow</title>
 		<meta name="viewport"
 			content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" type="text/css" href="../shared.css">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> 
+		<script src="../shared.js"></script>
 	</head>
-	<body>
-		<div>
+	<body class="lg-image-background">
+		<div class="loading">loading...</div>
+		<div class="main-wrapper">
 			<div>
-				<div id="menu">
+				<div id="menu" class="text-center menu">
 					<h1>Space Invaders</h1>
 					<div class="instructions">
-						<p>HOW TO PLAY</p>
-						<table>
-							<tr>
-								<td>move</td>
-								<td>left / right arrow</td>
-							</tr>
-							<tr>
-								<td>shoot</td>
-								<td>spacebar</td>
-							</tr>
-						</table>
+						<p class="red">HOW TO PLAY</p>
+						<p class="mobile-only">Tap to move and shoot</p>
+						<div class="desktop-only">
+							<span class="green">move: </span><span>left / right arrow</span>
+						</div>
+						<div class="desktop-only">
+							<span class="green">shoot: </span><span>spacebar</span>
+						</div>
 					</div>
-					<button onclick="startGame()">start</button>
+					<div class="button mt mb green" onclick="startGame()">start</div>
 				</div>
-				<canvas id="canvas" class="d-none" width="300" height="300"></canvas>
+
+				<div id="gameOverWrapper" class="d-none text-center menu">
+					<div class="d-flex flex-center">
+						<p>Game Over</p>
+						<div class="button mt mb" onclick="Invaders.resetGame()">Restart</div>
+					</div>
+				</div>
+
+				<canvas id="canvas" class="d-none main-canvas mb" width="300" height="300"></canvas>
 			</div>
-			<button onclick="InvadersAudio.toggleMute()">toggle sound</button>	
+			<div onclick="function(e) { toggleMute(e) }" class=" text-center button">sound: on</div>	
 		</div>
 		<div id="sprites" class="d-none"></div>
 
@@ -66,10 +75,21 @@
 
 				el.className += ` ${cls}`;
 			}
+			function toggleMute(e) {
+				const muted = InvadersAudio.toggleMute();
+				
+				if (muted) {
+					e.currentTarget.innerHTML = 'sound: off';
+				} else {
+					e.currentTarget.innerHTML = 'sound: on';
+				}
+			}
+
 			function updateGame() {
 				Invaders.update();
 				window.requestAnimationFrame(updateGame);
 			}
+			window.addEventListener('touchend', Invaders.startMobileMode);
 
 			function startGame() {
 				$('canvas').className = '';
@@ -79,37 +99,7 @@
 				Invaders.startGame();
 				window.requestAnimationFrame(updateGame);
 			};
+			document.querySelector('.loading').classList.add('d-none');
 		</script>
-
-		<style>
-			body {
-				background: black;
-				color: white;
-	  		}
-			.text-center {
-				text-align: center;
-			}
-			.d-none {
-				display: none;
-			}
-			.grid-container {
-				display: grid;
-				grid-template-columns: 25% minmax(min-content) 25%;
-			}
-			#canvas {
-				height: 600px;
-				width: 800px;
-				margin-bottom: 15px;
-			}
-			canvas {
-  				border: solid 1px white;
-			}
-			@media(max-width: 640px) {
-				#canvas {
-					width: 100%;
-					height: 100%;
-				}
-			}
-		</style>
 	</body>
 </html>

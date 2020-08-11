@@ -29,6 +29,7 @@ class InvadersGraphics {
 		this.alienCanvas = [];
 		this.explosionCanvas = [];
 		this.coverCanvas = [];
+
 		function createCanvas(scale) {
 			const canvas = document.createElement('canvas');
 			canvas.width = 16 * scale;
@@ -131,31 +132,10 @@ class InvadersGraphics {
 		);
 	}
 
-	drawGameOver() {
-		let dimensions = BFont.measureString('game over');
-		let x = parseInt(
-			this.outputWidth / 2 - (dimensions.width / 2)
-		);
-		let y = parseInt(
-			this.outputHeight / 2
-		);
-			
-		this.forceClear();
-		
-		BFont.drawString('game over', x, y, 1, this.ctx);
-
-		dimensions = BFont.measureString('press r to restart');
-		x = this.outputWidth / 2 - (dimensions.width / 2);
-		y += 50;
-
-		BFont.drawString(
-			'press r to restart', x, y, 1, this.ctx
-		);
-	}
-
 	drawLevelTransition(level, delay) {
-		let x = this.outputWidth / 2;
-		let y = this.outputHeight / 2;
+		const string = `wave ${level}`;
+		const x = this.outputWidth / 2 - BFont.measureString(string).width / 2;
+		const y = this.outputHeight / 2;
 
 		this.forceClear();
 
@@ -296,7 +276,7 @@ class InvadersGraphics {
 		);
 	}
 	
-	init() {
+	init(numCovers) {
 		this.ctx.fillStyle = '#f0f0f0';
 
 		for (let i=0; i<this.alienTypes; i++) {
@@ -313,7 +293,7 @@ class InvadersGraphics {
 				this.explosionCanvas[i]
 			);
 		}
-		for (let i=0; i<6; i++) {
+		for (let i=0; i<numCovers; i++) {
 			this.preloadCover(i);
 		}		
 		BGraphics.preloadDraw(
