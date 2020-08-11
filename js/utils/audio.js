@@ -34,9 +34,13 @@ const BAudio = {
 	},
 	init() {
 		if (this.ctx.audioWorklet) {
-			this.ctx.audioWorklet.addModule('whiteNoiseProcessor.js');
-			this.whiteNoiseNode = new AudioWorkletNode(this.ctx, 'white-noise-processor');
-			this.whiteNoiseNode.connect(this.ctx.destination);
+			try {
+				this.ctx.audioWorklet.addModule('whiteNoiseProcessor.js');
+				this.whiteNoiseNode = new AudioWorkletNode(this.ctx, 'white-noise-processor');
+				this.whiteNoiseNode.connect(this.ctx.destination);
+			} catch (ex) {
+				console.log(ex);
+			}
 		}
 	}
 }
