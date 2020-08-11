@@ -5,6 +5,7 @@
 			content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link rel="stylesheet" type="text/css" href="../shared.css">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> 
+		<link rel="stylesheet" type="text/css" href="invaders.css">
 		<script src="../shared.js"></script>
 	</head>
 	<body class="lg-image-background">
@@ -27,7 +28,7 @@
 				</div>
 
 				<div id="gameOverWrapper" class="d-none text-center menu">
-					<div class="d-flex flex-center">
+					<div class="d-flex flex-column flex-center">
 						<p>Game Over</p>
 						<div class="button mt mb" onclick="Invaders.resetGame()">Restart</div>
 					</div>
@@ -92,7 +93,6 @@
 			window.addEventListener('touchend', Invaders.startMobileMode);
 
 			function startGame() {
-				$('canvas').className = '';
 //				removeClass($('canvas'), 'd-none');	
 				addClass($('menu'), 'd-none');	
 				Invaders.init();			

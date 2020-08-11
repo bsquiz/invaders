@@ -1,0 +1,89 @@
+body {
+	background: black;
+	color: white;
+	font-family: 'Press Start 2P', cursive;
+}
+canvas {
+	border: solid 1px white;
+}
+.main-wrapper {
+	width: 800px;
+	margin: auto;
+}
+
+.button {
+	border: solid 2px;
+	padding: 5px;
+	margin: auto;
+	width: 200px;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.button:hover {
+	color: white;
+	background: green;
+}
+.mb {
+	margin-bottom: 15px;
+}
+.mt {
+	margin-top: 15px;
+}
+.d-flex {
+	display: flex;
+}
+.flex-center {
+	align-items: center;
+}
+.flex-column {
+	flex-direction: column;
+}
+.text-center {
+	text-align: center;
+}
+.red {
+	color: red;
+}
+.green {
+	color: green;
+}
+.d-none {
+	display: none;
+}
+.mobile-only {
+	display: none;
+}
+.desktop-only {
+	display: block;
+}
+.main-canvas {
+	height: 600px;
+	width: 800px;
+}
+
+@media(max-width: 640px) { 
+	.button { 
+	    width: 100%; 
+	    font-size: inherit; 
+	} 
+	.main-wrapper { 
+	    width: 100%; 
+	    margin-top: 0; 
+	} 
+	.main-canvas { 
+	    width: 100%; 
+	    height: 90%; 
+	} 
+	.menu { 
+	    text-align: center; 
+	    font-size: 1em; 
+	} 
+
+	.mobile-only { 
+	    display: block; 
+	} 
+	.desktop-only { 
+	    display: none; 
+	} 
+}
