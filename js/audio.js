@@ -21,7 +21,7 @@ const InvadersAudio = {
 	triangle: BAudio.createOscillator(BAudio.Oscillators.TRIANGLE),
 	sawtooth: BAudio.createOscillator(BAudio.Oscillators.SAWTOOTH),
 
-	toggleMute() { this.isMuted = !this.isMuted; },
+	toggleMute() { return this.isMuted = !this.isMuted; },
 
 	resetMusic() {
 		this.maxNextNoteTime = 50;

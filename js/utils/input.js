@@ -38,8 +38,11 @@ const BInput = {
 		LEFT: 0,
 		UP: 1
 	},
+	touchX: 0,
+
 	gamepadConnected: false,
 	getGamepadConnected() { return this.gamepadConnected; },
+	getTouchX() { return this.touchX; },
 	getMouseX() {
 		return this.mouse.x;
 	},
@@ -99,15 +102,24 @@ const BInput = {
 	},
 	init() {
 		const $canvas = document.getElementById('canvas');
-
+		const xScale = $canvas.width / window.innerWidth;
 		window.addEventListener(
 			'keydown',
 			e => this.setKeyDown(e.keyCode, true)
-		);  
+		); 
 		window.addEventListener(
 			'keyup',
 			e => this.setKeyDown(e.keyCode, false)
 		);
+
+		$canvas.addEventListener('touchstart', e => {
+			e.preventDefault();
+			this.setKeyDown(this.Keys.SPACE, true);
+			this.touchX = e.touches[0].screenX * xScale;
+		});
+		$canvas.addEventListener('touchend', e => {
+			this.setKeyDown(this.Keys.SPACE, false);
+		});
 
 		window.addEventListener('gamepadconnected', e => this.onGamepadConnected(e));
 		window.addEventListener('gamepaddisconnected', e => this.onGamepadDisconnected(e));
