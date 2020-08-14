@@ -8,35 +8,41 @@
 		<link rel="stylesheet" type="text/css" href="invaders.css">
 		<script src="../shared.js"></script>
 	</head>
-	<body class="lg-image-background">
-		<div class="loading">loading...</div>
+	<body>
 		<div class="main-wrapper">
-			<div>
-				<div id="menu" class="text-center menu">
-					<h1>Space Invaders</h1>
-					<div class="instructions">
-						<p class="red">HOW TO PLAY</p>
-						<p class="mobile-only">Tap to move and shoot</p>
-						<div class="desktop-only">
-							<span class="green">move: </span><span>left / right arrow</span>
-						</div>
-						<div class="desktop-only">
-							<span class="green">shoot: </span><span>spacebar</span>
-						</div>
+			<div id="menu" class="text-center menu">
+				<h1>Space Invaders</h1>
+				<div class="instructions">
+					<p class="red">HOW TO PLAY</p>
+					<p class="mobile-only">Tap to move and shoot</p>
+					<div class="desktop-only">
+						<span class="green">move: </span><span>left / right arrow</span>
 					</div>
-					<div class="button mt mb green" onclick="startGame()">start</div>
-				</div>
-
-				<div id="gameOverWrapper" class="d-none text-center menu">
-					<div class="d-flex flex-column flex-center">
-						<p>Game Over</p>
-						<div class="button mt mb" onclick="Invaders.resetGame()">Restart</div>
+					<div class="desktop-only">
+						<span class="green">shoot: </span><span>spacebar</span>
 					</div>
 				</div>
 
-				<canvas id="canvas" class="d-none main-canvas mb" width="300" height="300"></canvas>
+				<div class="button mt mb green" onclick="startGame()">start</div>
 			</div>
-			<div onclick="function(e) { toggleMute(e) }" class=" text-center button">sound: on</div>	
+
+			<div id="gameOverWrapper" class="d-none text-center menu">
+				<div class="d-flex flex-column flex-center">
+					<p>Game Over</p>
+					<div class="button mt mb" onclick="Invaders.resetGame()">Restart</div>
+				</div>
+			</div>
+
+			<div id="gameWrapper" class="d-none">
+				<div>
+					<canvas id="canvas" class="main-canvas mb" width="300" height="300"></canvas>
+
+					<div class="buttons">
+						<div id="togglePauseButton" class="text-center button mb green">pause</div>
+						<div id="toggleMuteButton" class="green text-center button">sound: on</div>	
+					</div>
+				</div>
+			</div>
 		</div>
 		<div id="sprites" class="d-none"></div>
 
@@ -76,6 +82,17 @@
 
 				el.className += ` ${cls}`;
 			}
+
+			function togglePause(e) {
+				if (!Invaders.isRunning) {
+					Invaders.startGame();
+					e.currentTarget.innerHTML = 'pause';
+				} else {
+					Invaders.stopGame();
+					e.currentTarget.innerHTML = 'play';
+				}
+			}
+
 			function toggleMute(e) {
 				const muted = InvadersAudio.toggleMute();
 				
@@ -90,16 +107,17 @@
 				Invaders.update();
 				window.requestAnimationFrame(updateGame);
 			}
-			window.addEventListener('touchend', Invaders.startMobileMode);
 
 			function startGame() {
-//				removeClass($('canvas'), 'd-none');	
-				addClass($('menu'), 'd-none');	
+				document.querySelector('.menu').classList.add('d-none');	
 				Invaders.init();			
 				Invaders.startGame();
 				window.requestAnimationFrame(updateGame);
 			};
-			document.querySelector('.loading').classList.add('d-none');
+
+			document.querySelector('#toggleMuteButton').addEventListener('click', toggleMute);
+			document.querySelector('#togglePauseButton').addEventListener('click', togglePause);
+			window.addEventListener('touchend', Invaders.startMobileMode);
 		</script>
 	</body>
 </html>

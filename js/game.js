@@ -29,6 +29,9 @@ const Invaders = {
 	maxAlienUpdateDelay: 10,
 	scaleFactor: 0,
 
+	$gameOverWrapper: null,
+	$gameWrapper: null,
+
 	startGame() {
 		this.isRunning = true;
 	},
@@ -38,8 +41,8 @@ const Invaders = {
 	},
 
 	gameOver() {
-		document.getElementById('gameOverWrapper').classList.remove('d-none');
-		document.getElementById('canvas').classList.add('d-none');
+		this.$gameOverWrapper.classList.remove('d-none');
+		this.$gameWrapper.classList.add('d-none');
 		this.stopGame();
 	},
 
@@ -411,8 +414,9 @@ const Invaders = {
 	},
 
 	resetGame() {
-		document.getElementById('gameOverWrapper').classList.add('d-none');
-		document.getElementById('canvas').classList.remove('d-none');
+		this.$gameOverWrapper.classList.add('d-none');
+		this.$gameWrapper.classList.remove('d-none');
+
 		this.score = 0;
 		this.level = 0;
 		this.lives = 3;
@@ -448,6 +452,10 @@ const Invaders = {
 
 	init() {
 		const $canvas = document.getElementById('canvas');
+
+		this.$gameWrapper = document.querySelector('#gameWrapper');
+		this.$gameOverWrapper = document.querySelector('#gameOverWrapper');
+
 		this.scaleFactor = 0.5;
 		this.graphics = new InvadersGraphics($canvas);
 		this.player = new InvadersPlayer();
