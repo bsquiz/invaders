@@ -410,7 +410,7 @@ const Invaders = {
 		this.graphics.setCovers(this.covers);
 		this.graphics.setExplosions(this.explosions);
 		this.graphics.setLives(this.lives);
-		this.graphics.init();
+		this.graphics.init(this.covers.length);
 	},
 
 	resetGame() {
