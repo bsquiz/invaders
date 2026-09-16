@@ -3,9 +3,13 @@ class InvadersGraphics {
 		const $body = document.getElementsByTagName('body')[0];
 		const $sprites = document.getElementById('sprites');
 
+		this.GREEN = '#04ee0d';
+		this.RED = '#f90317';
+		this.BLUE = '#03eaeb';
+
 		this.ctx = $canvas.getContext('2d', { alpha: false });
-		this.outputWidth = $canvas.width;
-		this.outputHeight = $canvas.height;
+		this.outputWidth = 600;
+		this.outputHeight = 600;
 		this.player = null;
 		this.aliens = null;
 		this.covers = null;
@@ -24,7 +28,7 @@ class InvadersGraphics {
 		this.score = 0;
 		this.lives = 3;
 
-		this.scale = 1;
+		this.scale = 2;
 
 		this.alienCanvas = [];
 		this.explosionCanvas = [];
@@ -36,7 +40,7 @@ class InvadersGraphics {
 			canvas.height = 16 * scale;
 			canvas.style.display = 'none';
 			$sprites.appendChild(canvas);
-		
+
 			return canvas;
 		}
 
@@ -59,10 +63,10 @@ class InvadersGraphics {
 			}
 			this.alienCanvas.push(aT);
 		}
-	
+
 		$body.appendChild(this.$playerCanvas);
 		$body.appendChild(this.$projectileCanvas);
-	}	
+	}
 
 	getSpriteRows() {
 		return this.graphicsMap.rows;
@@ -70,13 +74,13 @@ class InvadersGraphics {
 
 	getSpriteCols() {
 		return this.graphicsMap.cols;
-	}	
+	}
 	setSpaceship(spaceship) { this.spaceship = spaceship; }
 
 	setPlayer(player) {
 		this.player = player;
 	}
-	
+
 	setAliens(aliens) {
 		this.aliens = aliens;
 	}
@@ -120,9 +124,9 @@ class InvadersGraphics {
 				a.getWidth(),
 				a.getHeight()
 			);
-		}	
+		}
 	}
-	
+
 	forceClear() {
 		this.ctx.clearRect(
 			0,
@@ -145,13 +149,13 @@ class InvadersGraphics {
 			y,
 			1,
 			this.ctx
-		);	
+		);
 
 	}
 
 	drawCovers() {
 		let i = 0;
-		this.covers.forEach(cover => {	
+		this.covers.forEach(cover => {
 			this.drawImage(
 				this.coverCanvas[i],
 				cover.getX(),
@@ -160,7 +164,7 @@ class InvadersGraphics {
 			i++;
 		});
 	}
-	
+
 	drawProjectile(projectile) {
 		if (projectile.getIsActive()) {
 			this.drawImage(
@@ -171,7 +175,7 @@ class InvadersGraphics {
 
 		}
 	}
-	
+
 	drawProjectiles() {
 		this.playerProjectiles.forEach(projectile => {
 			this.drawProjectile(projectile);
@@ -191,7 +195,7 @@ class InvadersGraphics {
 			this.hudPositioning.y * this.scale,
 			1,
 			this.ctx
-		);	
+		);
 
 		drawX += 150;
 
@@ -217,7 +221,7 @@ class InvadersGraphics {
 
 	draw(drawWidth = this.outputWidth, drawHeight = this.outputHeight) {
 		let startY = this.hudPositioning.maxY;
-		
+
 		if (this.refreshHUD) {
 			startY = 0;
 		}
@@ -243,12 +247,12 @@ class InvadersGraphics {
 				this.alienCanvas[alien.getType()]
 			);
 		});
-		
+
 		if (this.spaceship.getIsActive()) {
 			this.drawImage(
 				this.$spaceshipCanvas,
 				this.spaceship.getX(),
-				this.spaceship.getY()	
+				this.spaceship.getY()
 			);
 		}
 
@@ -272,11 +276,12 @@ class InvadersGraphics {
 		BGraphics.preloadDraw(
 			this.covers[index].getStructure(),
 			this.coverCanvas[index],
-			'green'
+			this.BLUE
 		);
 	}
-	
+
 	init(numCovers) {
+		BGraphics.scale = this.scale;
 		this.ctx.fillStyle = '#f0f0f0';
 
 		for (let i=0; i<this.alienTypes; i++) {
@@ -295,22 +300,22 @@ class InvadersGraphics {
 		}
 		for (let i=0; i<numCovers; i++) {
 			this.preloadCover(i);
-		}		
+		}
 		BGraphics.preloadDraw(
 			InvadersSprites.projectile,
 			this.$projectileCanvas
 		);
-	
+
 		BGraphics.preloadDraw(
 			InvadersSprites.player,
 			this.$playerCanvas,
-			'green'
+			this.GREEN
 		);
-		
+
 		BGraphics.preloadDraw(
 			InvadersSprites.spaceship,
 			this.$spaceshipCanvas,
-			'red'
+			this.RED
 		);
-	}			
+	}
 }

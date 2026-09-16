@@ -77,7 +77,7 @@ const Invaders = {
 				InvadersAudio.playExplosionSnd();
 
 				return;
-			}	
+			}
 		}
 	},
 
@@ -88,11 +88,11 @@ const Invaders = {
 			if (!projectile.getIsActive()) {
 				projectile.setIsActive(true);
 				projectile.setX(launchX);
-				projectile.setY(launchY);	
+				projectile.setY(launchY);
 				return true;
 			}
 		}
-		
+
 		return false;
 	},
 
@@ -121,17 +121,17 @@ const Invaders = {
 				)
 			) {
 				c.destroyTile();
-				
+
 				if (c.getIsDestroyed()) {
 					this.covers.splice(i, 1);
 				}
-			
+
 				this.graphics.preloadCover(i);
 
 				return true;
 			}
 		}
-		
+
 		return false;
 	},
 
@@ -171,7 +171,7 @@ const Invaders = {
 			) {
 				projectile.setIsActive(false);
 				ob.takeDamage(1);
-				
+
 				if (ob.getIsDestroyed()) {
 					hitTestObjects.splice(i, 1);
 					this.startExplosion(ox, oy);
@@ -206,12 +206,15 @@ const Invaders = {
 					)
 					) {
 						this.score += this.spaceship.getPoints();
+						this.graphics.scheduleHUDRefresh();
+						this.graphics.setScore(this.score);
+						this.startExplosion(this.spaceship.getX(), this.spaceship.getY());
 						this.spaceship.reset();
 				}
 				}
 			}
 		);
-		
+
 		this.alienProjectiles.forEach(
 			projectile => {
 				this.updateProjectile(projectile, [this.player], () => {
@@ -221,7 +224,7 @@ const Invaders = {
 			}
 		);
 	},
-	
+
 	controlPlayerWithKeyboard() {
 		const leftKeyDown = BInput.keyIsDown(BInput.Keys.LEFT);
 		const rightKeyDown = BInput.keyIsDown(BInput.Keys.RIGHT);
@@ -234,7 +237,7 @@ const Invaders = {
 		} else if (rightKeyDown) {
 			this.player.setXSpeed(this.player.getDefaultXSpeed());
 		}
-		
+
 		if (leftKeyDown || rightKeyDown) {
 			this.player.setIsMoving(true);
 			this.player.move();
@@ -246,19 +249,19 @@ const Invaders = {
 			this.player.setX(
 				BInput.getMouseX() * this.scaleFactor
 			);
-			
+
 			if (BInput.getMouseClicked()) {
 				this.playerShoot();
 			}
 	},
-	
+
 	controlPlayerWithGamepad() {
 		const axes = BInput.getGamepadAxisState(BInput.AXES.LEFT);
-		
+
 		if (axes === 1) {
-			this.player.setXSpeed(this.player.getDefaultXSpeed());	
+			this.player.setXSpeed(this.player.getDefaultXSpeed());
 		} else if (axes === -1) {
-			this.player.setXSpeed(this.player.getDefaultXSpeed() * -1);	
+			this.player.setXSpeed(this.player.getDefaultXSpeed() * -1);
 		}
 
 		if (axes === -1 || axes === 1) {
@@ -278,33 +281,33 @@ const Invaders = {
 		}
 	},
 
-	
+
 	update() {
-		if (!this.isRunning) return; 
+		if (!this.isRunning) return;
 
 		if (this.isTransitioningLevel) {
 			this.levelTransitionTimer--;
-			
+
 			if (this.levelTransitionTimer < 0) {
 				this.levelTransitionTimer = this.MAX_LEVEL_TRANSITION_TIMER;
 				this.isTransitioningLevel = false;
 				this.graphics.forceClear();
 				this.graphics.drawHUD();
 			}
-			
+
 			return;
 		}
 
 		if (this.lives === 0) {
 			this.gameOver();
-			
+
 			return;
 		}
 
 		if (this.player.getIsDestroyed()) {
 			this.player.updateDestroyedTimer();
 		}
-		
+
 		if (this.player.getIsInvincible()) {
 			this.player.updateInvincibleTimer();
 		}
@@ -333,7 +336,7 @@ const Invaders = {
 		}
 
 		const s = Math.floor(Math.random() * 1000);
-			
+
 		if (s === 0 && !this.spaceship.getIsActive()) {
 			this.spaceship.setIsActive(true);
 		}
@@ -349,7 +352,7 @@ const Invaders = {
 			) {
 				this.spaceship.reset();
 			}
-		} 
+		}
 
 		this.explosions.forEach(
 			explosion => {
@@ -367,7 +370,7 @@ const Invaders = {
 
 		InvadersAudio.progressMusic();
 		this.graphics.draw(this.gameWidth, this.gameHeight);
-		
+
 		if (this.aliens.length === 0) {
 			this.startNextLevel();
 		}
@@ -381,7 +384,7 @@ const Invaders = {
 		for (let i=0; i<5; i++) {
 			const ap = new InvadersProjectile();
 			this.alienProjectiles.push(ap);
-		}	
+		}
 	},
 
 	initLevels() {
@@ -421,7 +424,7 @@ const Invaders = {
 		this.level = 0;
 		this.lives = 3;
 		this.alienUpdateDelay = this.maxAlienUpdateDelay;
-		
+
 		this.player.setX(
 			this.gameWidth / 2 - this.player.getWidth() / 2
 		);
@@ -436,7 +439,7 @@ const Invaders = {
 			this.isMobile
 		);
 
-		this.initLevels();	
+		this.initLevels();
 		this.initAliens();
 		this.initGraphics(this.covers.length);
 
@@ -447,8 +450,8 @@ const Invaders = {
 
 	startMobileMode() {
 	 	Invaders.isMobile = true;
-		window.removeEventListener('touchend', Invaders.startMobileMode); 
-	},	
+		window.removeEventListener('touchend', Invaders.startMobileMode);
+	},
 
 	init() {
 		const $canvas = document.getElementById('canvas');
@@ -471,7 +474,7 @@ const Invaders = {
 			this.explosions.push(new InvadersExplosion());
 		}
 
-		window.addEventListener('touchend', this.setIsMobile); 
+		window.addEventListener('touchend', this.setIsMobile);
 
 		BAudio.init();
 		BInput.init();

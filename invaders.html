@@ -3,11 +3,23 @@
 		<title>Space Invaders</title>
 		<meta name="viewport"
 			content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="../shared.css">
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Geo:ital@0;1&display=swap" rel="stylesheet">
+
 		<link rel="stylesheet" type="text/css" href="invaders.css">
+		<link rel="stylesheet" type="text/css" href="../shared.css">
+		<link rel="stylesheet" type="text/css" href="../nav.css" />
+
+		<script src="../shared.js"></script>
+	</head>
 	<body>
+		<div id="mainNavTarget"></div>
+		
 		<div class="main-wrapper">
-			<div id="menu" class="text-center menu">
+			<div id="menu" class="text-center menu geo-regular">
 				<h1>Space Invaders</h1>
 				<div class="instructions">
 					<p class="red">HOW TO PLAY</p>
@@ -23,21 +35,20 @@
 				<div class="button mt mb green" onclick="startGame()">start</div>
 			</div>
 
-			<div id="gameOverWrapper" class="d-none text-center menu">
+			<div id="gameOverWrapper" class="d-none text-center menu geo-regular">
 				<div class="d-flex flex-column flex-center">
-					<p>Game Over</p>
+					<h1 class="red">Game Over</h1>
 					<div class="button mt mb" onclick="Invaders.resetGame()">Restart</div>
 				</div>
 			</div>
 
-			<div id="gameWrapper" class="d-none">
+			<div id="gameWrapper" class="d-none geo-regular">
 				<div>
-					<canvas id="canvas" class="main-canvas mb" width="300" height="300"></canvas>
-
 					<div class="buttons">
-						<div id="togglePauseButton" class="text-center button mb green">pause</div>
-						<div id="toggleMuteButton" class="green text-center button">sound: on</div>	
+						<div id="togglePauseButton" class="d-inline-block text-center button mb green">pause</div>
+						<div id="toggleMuteButton" class="d-inline-block green text-center button">sound: on</div>
 					</div>
+					<canvas id="canvas" class="main-canvas mb" width="600" height="600"></canvas>
 				</div>
 			</div>
 		</div>
@@ -61,15 +72,15 @@
 		<script src="js/aliens.js"></script>
 		<script src="js/graphics.js"></script>
 		<script src="js/game.js"></script>
-	
+
 		<script>
 			function $(selector) {
 				return document.getElementById(selector);
 			}
-			
+
 			function removeClass(el, cls) {
 				const index = el.className.indexOf(cls);
-				
+
 				if (index === -1) return;
 
 				el.className.slice(index, cls.length);
@@ -92,7 +103,7 @@
 
 			function toggleMute(e) {
 				const muted = InvadersAudio.toggleMute();
-				
+
 				if (muted) {
 					e.currentTarget.innerHTML = 'sound: off';
 				} else {
@@ -106,8 +117,8 @@
 			}
 
 			function startGame() {
-				document.querySelector('.menu').classList.add('d-none');	
-				Invaders.init();			
+				document.querySelector('.menu').classList.add('d-none');
+				Invaders.init();
 				Invaders.startGame();
 				window.requestAnimationFrame(updateGame);
 			};
@@ -116,5 +127,7 @@
 			document.querySelector('#togglePauseButton').addEventListener('click', togglePause);
 			window.addEventListener('touchend', Invaders.startMobileMode);
 		</script>
+
+		<script type="text/javascript" src="../nav.js"></script>
 	</body>
 </html>
